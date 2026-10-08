@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Aurora Bookmarks · iOS 27</title>
+  
+  <!-- Apple & PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Aurora Bookmarks">
+  <meta name="theme-color" content="#060810">
+  <meta name="description" content="iOS 27 风格高颜值书签管理工具站，支持导入导出、分门别类、快速搜索与最近常访问网站智能微件。">
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon-192.svg">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.svg">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Dynamic Ambient Wallpaper -->
+  <div class="ambient-background">
+    <div class="ambient-particles"></div>
+  </div>
+
+  <!-- Dynamic Island (iOS 27 Floating Header Capsule) -->
+  <header class="dynamic-island-wrapper">
+    <div class="dynamic-island" id="dynamic-island">
+      <div class="island-brand" id="island-brand" title="Aurora Bookmarks iOS 27">
+        <span class="brand-dot"></span>
+        <span>Aurora</span>
+      </div>
+
+      <div class="island-time" id="island-time">--:--</div>
+      <div class="island-divider"></div>
+
+      <!-- Quick Search Trigger -->
+      <button class="island-search-btn" id="island-search-btn" title="快捷搜索 (⌘K 或 /)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>搜索</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <div class="island-stat">
+        <span class="island-stat-count" id="island-stat-count">0</span>
+        <span>书签</span>
+      </div>
+
+      <div class="island-divider"></div>
+
+      <!-- Actions -->
+      <div class="island-actions">
+        <button class="island-icon-btn" id="island-add-btn" title="添加新书签">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button class="island-icon-btn" id="island-import-btn" title="导入与导出书签">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+        <button class="island-icon-btn" id="island-theme-btn" title="切换 iOS 27 主题">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Theme Selector Dropdown -->
+    <div class="theme-menu" id="theme-menu">
+      <button class="theme-option active" data-theme="nebula">
+        <span class="theme-preview" style="background: linear-gradient(135deg, #6C5CE7, #FD79A8);"></span>
+        <span>暗夜星云 (Nebula)</span>
+      </button>
+      <button class="theme-option" data-theme="pacific">
+        <span class="theme-preview" style="background: linear-gradient(135deg, #00CEC9, #0984E3);"></span>
+        <span>深海极光 (Pacific)</span>
+      </button>
+      <button class="theme-option" data-theme="solar">
+        <span class="theme-preview" style="background: linear-gradient(135deg, #FF6B6B, #FECA57);"></span>
+        <span>日落暖阳 (Solar)</span>
+      </button>
+      <button class="theme-option" data-theme="emerald">
+        <span class="theme-preview" style="background: linear-gradient(135deg, #2ED573, #1E90FF);"></span>
+        <span>翡翠薄雾 (Emerald)</span>
+      </button>
+      <button class="theme-option" data-theme="titanium">
+        <span class="theme-preview" style="background: linear-gradient(135deg, #E8EEF5, #93C5FD);"></span>
+        <span>液态钛金 (Titanium)</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- App Main Content Container -->
+  <main class="app-container">
+    <!-- iOS 27 Smart Widgets Shelf (常访问 & 最近访问微件) -->
+    <section class="widgets-section" id="widgets-section">
+      <div class="widgets-header">
+        <div class="widgets-title-row">
+          <h2 class="widgets-title">智能微件</h2>
+          <span class="widgets-badge">iOS 27 Smart Stack</span>
+        </div>
+      </div>
+
+      <div class="widgets-grid">
+        <!-- Widget 1: Frequently Visited (常访问) -->
+        <div class="widget-card">
+          <div class="widget-header">
+            <div class="widget-name-box">
+              <div class="widget-icon-pill widget-icon-fire">🔥</div>
+              <div>
+                <div class="widget-label">常访问的网站</div>
+                <div class="widget-sublabel">依据点击频次智能排序</div>
+              </div>
+            </div>
+          </div>
+          <div class="widget-items-list" id="frequent-widget-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Widget 2: Recently Visited (最近访问) -->
+        <div class="widget-card">
+          <div class="widget-header">
+            <div class="widget-name-box">
+              <div class="widget-icon-pill widget-icon-clock">🕒</div>
+              <div>
+                <div class="widget-label">最近访问的网站</div>
+                <div class="widget-sublabel">记录最近打开的时间足迹</div>
+              </div>
+            </div>
+          </div>
+          <div class="widget-items-list" id="recent-widget-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Widget 3: Stats Overview (概览微件) -->
+        <div class="widget-card">
+          <div class="widget-header">
+            <div class="widget-name-box">
+              <div class="widget-icon-pill widget-icon-stats">📊</div>
+              <div>
+                <div class="widget-label">书签库概览</div>
+                <div class="widget-sublabel">已安全保存在本地浏览器</div>
+              </div>
+            </div>
+          </div>
+          <div class="stats-overview-box">
+            <div class="stat-metric-card">
+              <div class="stat-metric-num" id="stat-total-bookmarks">0</div>
+              <div class="stat-metric-label">收纳书签</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-num" id="stat-total-categories">0</div>
+              <div class="stat-metric-label">分类目录</div>
+            </div>
+            <div class="stat-metric-card">
+              <div class="stat-metric-num" id="stat-total-visits">0</div>
+              <div class="stat-metric-label">累计访问</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Filter & Control Toolbar (分门别类导航) -->
+    <section class="controls-section">
+      <div class="toolbar-top">
+        <!-- Breadcrumbs Navigation -->
+        <div class="breadcrumbs-trail" id="breadcrumbs-trail">
+          <span class="crumb-item crumb-active">全部书签</span>
+        </div>
+
+        <!-- View Controls & Category Drawer Button -->
+        <div class="toolbar-actions">
+          <button class="action-pill-btn" id="open-drawer-btn" title="查看所有多级分类">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <span>全部分类</span>
+          </button>
+
+          <!-- View Mode Segmented Control -->
+          <div class="segmented-control">
+            <button class="seg-btn" data-view="grid" title="iOS 图标网格视图">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>图标</span>
+            </button>
+            <button class="seg-btn active" data-view="card" title="详细卡片视图">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+              </svg>
+              <span>卡片</span>
+            </button>
+            <button class="seg-btn" data-view="list" title="紧凑列表视图">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+              <span>列表</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Category Pills Bar -->
+      <div class="category-pills-bar" id="category-pills-bar">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- Main Bookmarks Shelf -->
+    <section class="bookmarks-section" id="bookmarks-section">
+      <div class="bookmarks-container view-card" id="bookmarks-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- iOS 27 Floating Dock -->
+  <nav class="dock-wrapper">
+    <div class="dock">
+      <button class="dock-item active" data-dock="all" title="全部书签">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="dock-item-label">全部</span>
+      </button>
+
+      <button class="dock-item" data-dock="categories" title="分类树">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span class="dock-item-label">分类</span>
+      </button>
+
+      <button class="dock-item" data-dock="widgets" title="智能微件">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span class="dock-item-label">微件</span>
+      </button>
+
+      <button class="dock-item" data-dock="favorites" title="收藏夹">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span class="dock-item-label">收藏</span>
+      </button>
+
+      <button class="dock-item" data-dock="import" title="导入与管理">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span class="dock-item-label">管理</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Category Explorer Drawer (全部分类多级抽屉) -->
+  <div class="category-drawer-backdrop" id="category-drawer-backdrop"></div>
+  <aside class="category-drawer" id="category-drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">📁 分类目录导航</div>
+      <button class="drawer-close-btn" id="close-drawer-btn" title="关闭">✕</button>
+    </div>
+    <div class="drawer-search-box">
+      <input type="text" class="drawer-search-input" id="drawer-search-input" placeholder="过滤分类名称...">
+    </div>
+    <div class="drawer-content" id="drawer-categories-list">
+      <!-- Rendered by JS -->
+    </div>
+  </aside>
+
+  <!-- Spotlight Search Modal (iOS 27 Command Palette) -->
+  <div class="spotlight-backdrop" id="spotlight-backdrop">
+    <div class="spotlight-modal">
+      <div class="spotlight-input-row">
+        <span class="spotlight-icon">🔍</span>
+        <input type="text" class="spotlight-input" id="spotlight-input" placeholder="快速搜索书签、网址、域名或分类..." autocomplete="off">
+      </div>
+      <div class="spotlight-results" id="spotlight-results">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="spotlight-footer">
+        <span>↑↓ 选择 · 回车打开 · ESC 退出</span>
+        <span>Aurora Spotlight</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Bookmark Modal -->
+  <div class="modal-backdrop" id="bookmark-modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="bookmark-modal-title">添加新书签</h3>
+        <button class="modal-close-btn" type="button">✕</button>
+      </div>
+      <form id="bookmark-form">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" for="form-title">书签标题</label>
+          <input type="text" class="form-input" id="form-title" placeholder="例如：GitHub" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" for="form-url">网址链接 (URL)</label>
+          <input type="url" class="form-input" id="form-url" placeholder="https://example.com" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label class="form-label" for="form-category">选择已有分类</label>
+          <select class="form-select" id="form-category">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label" for="form-new-category">或输入新分类名称</label>
+          <input type="text" class="form-input" id="form-new-category" placeholder="例如：人工智能 / 编程开发">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="action-pill-btn modal-close-btn">取消</button>
+          <button type="submit" class="action-pill-btn primary">保存书签</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Import / Export Modal -->
+  <div class="modal-backdrop" id="import-modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">导入与导出管理</h3>
+        <button class="modal-close-btn" type="button">✕</button>
+      </div>
+
+      <!-- Quick Preset Load Button -->
+      <div style="background: rgba(10, 132, 255, 0.12); border: 1px solid rgba(10, 132, 255, 0.3); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div>
+          <div style="font-size: 14px; font-weight: 700; color: #FFFFFF;">载入精选预设书签</div>
+          <div style="font-size: 11px; color: var(--text-tertiary);">一键导入当前备份的 1,084 条精选网址</div>
+        </div>
+        <button type="button" class="action-pill-btn primary" id="load-preset-btn">
+          <span>⚡ 一键载入</span>
+        </button>
+      </div>
+
+      <!-- Drag & Drop Zone -->
+      <div class="dropzone" id="import-dropzone">
+        <div class="dropzone-icon">📥</div>
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">点击或拖拽浏览器书签 HTML 文件到此处</div>
+        <div style="font-size: 11px; color: var(--text-tertiary);">支持 Chrome / Edge / Safari / Firefox 导出的 HTML 书签或 JSON 备份</div>
+        <input type="file" id="import-file-input" accept=".html,.json" style="display: none;">
+      </div>
+
+      <!-- Export Operations -->
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="action-pill-btn" id="export-html-btn" style="flex: 1; justify-content: center;">
+          <span>📤 导出标准 HTML</span>
+        </button>
+        <button type="button" class="action-pill-btn" id="export-json-btn" style="flex: 1; justify-content: center;">
+          <span>💾 导出 JSON 备份</span>
+        </button>
+      </div>
+
+      <!-- Clear Data -->
+      <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+        <button type="button" class="action-pill-btn" id="clear-all-btn" style="color: var(--ios-red); border-color: rgba(255, 69, 58, 0.3);">
+          <span>🗑 清空本地数据</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Script (ES Module) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

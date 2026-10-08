@@ -1,0 +1,21 @@
+{
+  "name": "Aurora Bookmarks iOS 27",
+  "short_name": "Bookmarks",
+  "description": "iOS 27 风格高颜值书签管理工具站",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090A0F",
+  "theme_color": "#0E1118",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "assets/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

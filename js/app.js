@@ -26,27 +26,68 @@ class App {
   }
 
   async init() {
-    this.setupClock();
     this.setupKeyboardShortcuts();
     this.setupEventListeners();
+    this.setupScrollEffects();
     await this.loadSettings();
     await this.loadData();
     this.initBackgroundEffects();
+    requestAnimationFrame(() => {
+      UIRenderer.updateDockGlider(false);
+    });
+    document.fonts?.ready?.then(() => {
+      UIRenderer.updateDockGlider(false);
+    });
   }
 
-  // --- Clock in Dynamic Island ---
-  setupClock() {
-    const updateTime = () => {
-      const el = document.getElementById('island-time');
-      if (el) {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        el.textContent = `${hours}:${minutes}`;
+  // --- Dynamic Island Auto-hide on Scroll ---
+  setupScrollEffects() {
+    const islandWrapper = document.getElementById('dynamic-island-wrapper') || document.querySelector('.dynamic-island-wrapper');
+    if (!islandWrapper) return;
+
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY || window.pageYOffset || 0;
+          const maxScroll = (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight;
+
+          // Always reveal island near the top of the page
+          if (currentScrollY <= 24) {
+            islandWrapper.classList.remove('island-hidden');
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+          }
+
+          // Ignore elastic bouncing past bounds
+          if (currentScrollY < 0 || (maxScroll > 0 && currentScrollY > maxScroll)) {
+            ticking = false;
+            return;
+          }
+
+          const delta = currentScrollY - lastScrollY;
+
+          // Filter out minor jitter (minimum delta threshold of 6px)
+          if (Math.abs(delta) >= 6) {
+            if (delta > 0) {
+              // Scrolling down -> hide island (moves up out of viewport)
+              islandWrapper.classList.add('island-hidden');
+              this.toggleThemeMenu(false);
+            } else {
+              // Scrolling up -> reveal island (moves down into viewport)
+              islandWrapper.classList.remove('island-hidden');
+            }
+            lastScrollY = currentScrollY;
+          }
+
+          ticking = false;
+        });
+        ticking = true;
       }
-    };
-    updateTime();
-    setInterval(updateTime, 1000);
+    }, { passive: true });
   }
 
   // --- Keyboard Shortcuts (Spotlight: Cmd+K / Ctrl+K / / ) ---
@@ -95,14 +136,28 @@ class App {
   // --- Event Listeners ---
   setupEventListeners() {
     // Dynamic Island Triggers
-    document.getElementById('island-search-btn')?.addEventListener('click', () => this.openSpotlight());
-    document.getElementById('island-add-btn')?.addEventListener('click', () => this.openAddModal());
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const islandWrapper = document.getElementById('dynamic-island-wrapper');
+      islandWrapper?.classList.remove('island-hidden');
+    };
+    document.getElementById('island-scroll-top-btn')?.addEventListener('click', scrollToTop);
+    document.getElementById('island-brand')?.addEventListener('click', scrollToTop);
+
+    const islandSearchBtn = document.getElementById('island-search-btn');
+    islandSearchBtn?.addEventListener('mousedown', (e) => e.preventDefault());
+    islandSearchBtn?.addEventListener('click', () => this.openSpotlight());
+
+    const islandAddBtn = document.getElementById('island-add-btn');
+    islandAddBtn?.addEventListener('mousedown', (e) => e.preventDefault());
+    islandAddBtn?.addEventListener('click', () => this.openAddModal());
     document.getElementById('island-theme-btn')?.addEventListener('click', () => this.toggleThemeMenu());
     document.getElementById('island-import-btn')?.addEventListener('click', () => this.openImportModal());
 
     // Theme selector
     document.querySelectorAll('.theme-option').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const theme = btn.getAttribute('data-theme');
         this.setTheme(theme);
         this.toggleThemeMenu(false);
@@ -150,11 +205,17 @@ class App {
         this.handleDockAction(action);
       });
     });
+    window.addEventListener('resize', () => {
+      UIRenderer.updateDockGlider(false);
+    });
 
     // Spotlight Input
     const spotlightInput = document.getElementById('spotlight-input');
     spotlightInput?.addEventListener('input', (e) => {
       this.handleSpotlightSearch(e.target.value);
+    });
+    document.querySelector('.spotlight-input-row')?.addEventListener('click', () => {
+      spotlightInput?.focus();
     });
 
     // Close Spotlight backdrop
@@ -208,6 +269,47 @@ class App {
         }
       }
     });
+
+    // Widget Slider navigation buttons (Frequent & Recent widgets)
+    document.querySelectorAll('.widget-nav-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetId = btn.getAttribute('data-target');
+        const container = document.getElementById(targetId);
+        if (!container) return;
+        const isNext = btn.classList.contains('next');
+        const scrollAmount = Math.max(160, container.clientWidth * 0.75);
+        container.scrollBy({
+          left: isNext ? scrollAmount : -scrollAmount,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Support horizontal wheel scrolling and auto-updating nav button states
+    ['frequent-widget-list', 'recent-widget-list', 'category-pills-bar'].forEach(id => {
+      const container = document.getElementById(id);
+      if (!container) return;
+      if (id !== 'category-pills-bar') {
+        container.addEventListener('scroll', () => {
+          UIRenderer.updateWidgetNav(id);
+        }, { passive: true });
+      }
+      container.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && container.scrollWidth > container.clientWidth) {
+          container.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      }, { passive: false });
+    });
+
+    window.addEventListener('resize', () => {
+      UIRenderer.updateWidgetNav('frequent-widget-list');
+      UIRenderer.updateWidgetNav('recent-widget-list');
+      UIRenderer.updateCategoryGlider(null, false);
+      UIRenderer.updateSegmentedGlider(false);
+    }, { passive: true });
   }
 
   // --- Settings & Data Initialization ---
@@ -216,7 +318,7 @@ class App {
     this.viewMode = await db.getSetting('viewMode', 'card');
 
     this.applyTheme(this.currentTheme);
-    this.updateViewSegmentedButtons();
+    this.updateViewSegmentedButtons(false);
   }
 
   async loadData() {
@@ -242,8 +344,8 @@ class App {
     UIRenderer.renderStatsOverview(this.bookmarks.length, this.categories.length, totalVisits);
 
     // Render Widgets
-    const frequentItems = await db.getFrequent(8);
-    const recentItems = await db.getRecent(8);
+    const frequentItems = await db.getFrequent(10);
+    const recentItems = await db.getRecent(10);
 
     UIRenderer.renderFrequentWidget(frequentItems, (id) => this.handleOpenBookmark(id));
     UIRenderer.renderRecentWidget(recentItems, (id) => this.handleOpenBookmark(id));
@@ -287,6 +389,7 @@ class App {
     }
 
     UIRenderer.renderBookmarks(filtered, this.viewMode, {
+      activeCategory: this.activeCategory,
       onVisitClick: (id) => this.handleOpenBookmark(id),
       onToggleFavorite: (id) => this.handleToggleFavorite(id),
       onEdit: (id) => this.handleOpenEditModal(id),
@@ -308,8 +411,8 @@ class App {
     window.open(item.url, '_blank', 'noopener,noreferrer');
 
     // Update frequent & recent widgets
-    const frequentItems = await db.getFrequent(8);
-    const recentItems = await db.getRecent(8);
+    const frequentItems = await db.getFrequent(10);
+    const recentItems = await db.getRecent(10);
     UIRenderer.renderFrequentWidget(frequentItems, (i) => this.handleOpenBookmark(i));
     UIRenderer.renderRecentWidget(recentItems, (i) => this.handleOpenBookmark(i));
 
@@ -327,23 +430,42 @@ class App {
   handleSelectCategory(category) {
     this.activeCategory = category;
     this.toggleCategoryDrawer(false);
-    this.refreshUI();
 
-    // Scroll to bookmarks list
-    document.getElementById('bookmarks-section')?.scrollIntoView({ behavior: 'smooth' });
+    let activePillEl = null;
+    document.querySelectorAll('.category-pill').forEach(btn => {
+      const isActive = btn.getAttribute('data-cat') === category;
+      btn.classList.toggle('active', isActive);
+      if (isActive) activePillEl = btn;
+    });
+
+    if (activePillEl) {
+      UIRenderer.updateCategoryGlider(activePillEl, true);
+      activePillEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    } else {
+      UIRenderer.updateCategoryGlider(null, true);
+    }
+
+    // Update drawer item state
+    document.querySelectorAll('.drawer-folder-item').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-cat') === category);
+    });
+
+    this.renderBreadcrumbs();
+    this.renderFilteredBookmarks();
   }
 
   setViewMode(mode) {
     this.viewMode = mode;
     db.saveSetting('viewMode', mode);
-    this.updateViewSegmentedButtons();
+    this.updateViewSegmentedButtons(true);
     this.renderFilteredBookmarks();
   }
 
-  updateViewSegmentedButtons() {
+  updateViewSegmentedButtons(animate = true) {
     document.querySelectorAll('.seg-btn[data-view]').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-view') === this.viewMode);
     });
+    UIRenderer.updateSegmentedGlider(animate);
   }
 
   setTheme(theme) {
@@ -360,9 +482,22 @@ class App {
       document.documentElement.setAttribute('data-theme', theme);
     }
 
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      const themeColors = {
+        nebula: '#060810',
+        pacific: '#030d1a',
+        solar: '#140807',
+        emerald: '#05130f',
+        titanium: '#E8EEF5'
+      };
+      metaThemeColor.setAttribute('content', themeColors[theme] || '#060810');
+    }
+
     document.querySelectorAll('.theme-option').forEach(el => {
       el.classList.toggle('active', el.getAttribute('data-theme') === theme);
     });
+    UIRenderer.updateDockGlider(false);
   }
 
   toggleThemeMenu(show) {
@@ -381,12 +516,20 @@ class App {
     if (backdrop && drawer) {
       backdrop.classList.toggle('active', show);
       drawer.classList.toggle('active', show);
+      if (show) {
+        const input = document.getElementById('drawer-search-input');
+        if (input) {
+          void drawer.offsetHeight;
+          setTimeout(() => input.focus(), 60);
+        }
+      }
     }
   }
 
   handleDockAction(action) {
     document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
     document.querySelector(`.dock-item[data-dock="${action}"]`)?.classList.add('active');
+    UIRenderer.updateDockGlider(true);
 
     if (action === 'all') {
       this.handleSelectCategory('all');
@@ -402,6 +545,7 @@ class App {
       } else {
         this.activeCategory = '★ 收藏';
         UIRenderer.renderBookmarks(favorites, this.viewMode, {
+          activeCategory: this.activeCategory,
           onVisitClick: (id) => this.handleOpenBookmark(id),
           onToggleFavorite: (id) => this.handleToggleFavorite(id),
           onEdit: (id) => this.handleOpenEditModal(id),
@@ -423,8 +567,25 @@ class App {
     if (backdrop && input) {
       backdrop.classList.add('active');
       input.value = '';
-      input.focus();
       this.handleSpotlightSearch('');
+
+      // Force layout recalculation so the browser marks the modal tree as visible before focusing
+      void backdrop.offsetHeight;
+
+      // Multi-stage focus to guarantee focus across keyboard shortcuts, clicks, and CSS transitions
+      input.focus();
+      requestAnimationFrame(() => {
+        input.focus();
+        input.select();
+      });
+      setTimeout(() => {
+        input.focus();
+      }, 40);
+      setTimeout(() => {
+        if (document.activeElement !== input) {
+          input.focus();
+        }
+      }, 120);
     }
   }
 
@@ -446,8 +607,15 @@ class App {
     document.getElementById('form-title').value = '';
     document.getElementById('form-url').value = '';
     this.populateCategorySelect();
-    document.getElementById('bookmark-modal-backdrop')?.classList.add('active');
-    document.getElementById('form-title')?.focus();
+    const backdrop = document.getElementById('bookmark-modal-backdrop');
+    backdrop?.classList.add('active');
+    const titleInput = document.getElementById('form-title');
+    if (backdrop && titleInput) {
+      void backdrop.offsetHeight;
+      titleInput.focus();
+      requestAnimationFrame(() => titleInput.focus());
+      setTimeout(() => titleInput.focus(), 40);
+    }
   }
 
   handleOpenEditModal(id) {
@@ -460,7 +628,18 @@ class App {
     document.getElementById('form-title').value = item.title;
     document.getElementById('form-url').value = item.url;
     this.populateCategorySelect(item.category);
-    document.getElementById('bookmark-modal-backdrop')?.classList.add('active');
+    const backdrop = document.getElementById('bookmark-modal-backdrop');
+    backdrop?.classList.add('active');
+    const titleInput = document.getElementById('form-title');
+    if (backdrop && titleInput) {
+      void backdrop.offsetHeight;
+      titleInput.focus();
+      requestAnimationFrame(() => {
+        titleInput.focus();
+        titleInput.select();
+      });
+      setTimeout(() => titleInput.focus(), 40);
+    }
   }
 
   populateCategorySelect(selectedCategory = '') {

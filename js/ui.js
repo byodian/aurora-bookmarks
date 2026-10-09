@@ -79,6 +79,29 @@ export class UIRenderer {
   }
 
   /**
+   * Update Widget Navigation Controls (Prev/Next buttons visibility & disabled state)
+   */
+  static updateWidgetNav(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const card = container.closest('.widget-card');
+    if (!card) return;
+    const prevBtn = card.querySelector('.widget-nav-btn.prev');
+    const nextBtn = card.querySelector('.widget-nav-btn.next');
+    const controls = card.querySelector('.widget-nav-controls');
+    if (!prevBtn || !nextBtn || !controls) return;
+
+    requestAnimationFrame(() => {
+      const hasOverflow = container.scrollWidth > container.clientWidth + 4;
+      controls.style.opacity = hasOverflow ? '1' : '0';
+      controls.style.pointerEvents = hasOverflow ? 'auto' : 'none';
+
+      prevBtn.disabled = container.scrollLeft <= 4;
+      nextBtn.disabled = container.scrollLeft + container.clientWidth >= container.scrollWidth - 4;
+    });
+  }
+
+  /**
    * Render Frequently Visited Widget Items
    */
   static renderFrequentWidget(items, onVisitClick) {
@@ -87,11 +110,12 @@ export class UIRenderer {
 
     if (!items || items.length === 0) {
       container.innerHTML = `
-        <div class="widget-empty-hint" style="grid-column: 1 / -1;">
+        <div class="widget-empty-hint" style="width: 100%;">
           <span>⚡ 暂无访问数据</span>
           <span style="font-size: 11px;">点击下方任意书签即可在此快速直达</span>
         </div>
       `;
+      this.updateWidgetNav('frequent-widget-list');
       return;
     }
 
@@ -110,6 +134,8 @@ export class UIRenderer {
         onVisitClick(id);
       });
     });
+
+    this.updateWidgetNav('frequent-widget-list');
   }
 
   /**
@@ -121,11 +147,12 @@ export class UIRenderer {
 
     if (!items || items.length === 0) {
       container.innerHTML = `
-        <div class="widget-empty-hint" style="grid-column: 1 / -1;">
+        <div class="widget-empty-hint" style="width: 100%;">
           <span>🕒 暂无最近记录</span>
           <span style="font-size: 11px;">打开过的书签会自动收纳在这里</span>
         </div>
       `;
+      this.updateWidgetNav('recent-widget-list');
       return;
     }
 
@@ -143,6 +170,8 @@ export class UIRenderer {
         onVisitClick(id);
       });
     });
+
+    this.updateWidgetNav('recent-widget-list');
   }
 
   /**
@@ -162,6 +191,143 @@ export class UIRenderer {
   }
 
   /**
+   * Update Apple Sliding Glass Glider in Category Pills Bar
+   */
+  static updateCategoryGlider(activePill, animate = true) {
+    const container = document.getElementById('category-pills-bar');
+    if (!container) return;
+    let glider = container.querySelector('.category-pills-glider');
+    if (!glider) {
+      glider = document.createElement('div');
+      glider.className = 'category-pills-glider';
+      glider.id = 'category-pills-glider';
+      container.prepend(glider);
+    }
+
+    if (!activePill) {
+      activePill = container.querySelector('.category-pill.active');
+    }
+    if (!activePill) {
+      glider.style.opacity = '0';
+      return;
+    }
+
+    container.classList.add('has-glider');
+
+    const left = activePill.offsetLeft;
+    const top = activePill.offsetTop;
+    const width = activePill.offsetWidth;
+    const height = activePill.offsetHeight;
+
+    if (!animate) {
+      glider.style.transition = 'none';
+    } else {
+      glider.style.transition = 'transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), width 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease';
+    }
+
+    glider.style.transform = `translate3d(${left}px, ${top}px, 0)`;
+    glider.style.width = `${width}px`;
+    glider.style.height = `${height}px`;
+    glider.style.opacity = '1';
+
+    if (!animate) {
+      void glider.offsetHeight;
+      glider.style.transition = '';
+    }
+  }
+
+  /**
+   * Update Apple Sliding Glass Glider in Segmented Control
+   */
+  static updateSegmentedGlider(animate = true) {
+    const container = document.querySelector('.segmented-control');
+    if (!container) return;
+    let glider = container.querySelector('.segmented-glider');
+    if (!glider) {
+      glider = document.createElement('div');
+      glider.className = 'segmented-glider';
+      container.prepend(glider);
+    }
+
+    const activeBtn = container.querySelector('.seg-btn.active');
+    if (!activeBtn) {
+      glider.style.opacity = '0';
+      return;
+    }
+
+    container.classList.add('has-glider');
+    const left = activeBtn.offsetLeft;
+    const top = activeBtn.offsetTop;
+    const width = activeBtn.offsetWidth;
+    const height = activeBtn.offsetHeight;
+
+    if (!animate) {
+      glider.style.transition = 'none';
+    } else {
+      glider.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease';
+    }
+
+    glider.style.transform = `translate3d(${left}px, ${top}px, 0)`;
+    glider.style.width = `${width}px`;
+    glider.style.height = `${height}px`;
+    glider.style.opacity = '1';
+
+    if (!animate) {
+      void glider.offsetHeight;
+      glider.style.transition = '';
+    }
+  }
+
+  /**
+   * Update Floating Liquid Glass Capsule Glider in Bottom Dock Tab Bar
+   */
+  static updateDockGlider(animate = true) {
+    const container = document.querySelector('.dock');
+    if (!container) return;
+    let glider = container.querySelector('.dock-glider');
+    if (!glider) {
+      glider = document.createElement('div');
+      glider.className = 'dock-glider';
+      glider.id = 'dock-glider';
+      container.prepend(glider);
+    }
+
+    const activeItem = container.querySelector('.dock-item.active');
+    if (!activeItem) {
+      glider.style.opacity = '0';
+      return;
+    }
+
+    const left = activeItem.offsetLeft;
+    const top = activeItem.offsetTop;
+    const width = activeItem.offsetWidth;
+    const height = activeItem.offsetHeight;
+
+    if (width === 0 || height === 0) {
+      requestAnimationFrame(() => this.updateDockGlider(animate));
+      return;
+    }
+
+    container.classList.add('has-glider');
+
+    if (!animate) {
+      glider.style.transition = 'none';
+    } else {
+      glider.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease';
+    }
+
+    glider.style.transform = `translate3d(${left}px, ${top}px, 0)`;
+    glider.style.width = `${width}px`;
+    glider.style.height = `${height}px`;
+    glider.style.opacity = '1';
+
+    if (!animate) {
+      void glider.offsetHeight;
+      glider.style.transition = '';
+    }
+  }
+
+  /**
    * Render Category Pills Navigation Bar
    */
   static renderCategoryPills(categories, activeCategory, onSelect) {
@@ -172,6 +338,7 @@ export class UIRenderer {
     const totalCount = categories.reduce((sum, c) => sum + c.count, 0);
 
     let html = `
+      <div class="category-pills-glider" id="category-pills-glider"></div>
       <button class="category-pill ${activeCategory === 'all' ? 'active' : ''}" data-cat="all">
         <span>全部书签</span>
         <span class="pill-count">${totalCount}</span>
@@ -196,6 +363,10 @@ export class UIRenderer {
         const cat = btn.getAttribute('data-cat');
         onSelect(cat);
       });
+    });
+
+    requestAnimationFrame(() => {
+      this.updateCategoryGlider(null, false);
     });
   }
 
@@ -264,18 +435,27 @@ export class UIRenderer {
       return;
     }
 
+    const currentCat = handlers.activeCategory || 'all';
+    const isAllCategory = currentCat === 'all';
+
     if (viewMode === 'grid') {
-      container.innerHTML = items.map(item => `
+      container.innerHTML = items.map(item => {
+        const showCategory = (isAllCategory || currentCat === '★ 收藏') && item.category && item.category !== '未分类';
+        return `
         <div class="bm-grid-item" data-id="${item.id}" title="${this.escapeHtml(item.title)}">
-          ${item.visitCount > 0 ? `<span class="bm-grid-badge">${item.visitCount}</span>` : ''}
+          ${item.isFavorite ? `<span class="bm-grid-badge" title="已收藏" style="color: #FFD60A; background: rgba(255, 214, 10, 0.18);">★</span>` : ''}
           ${this.renderIconHTML(item, 'bm-grid-icon-wrap')}
           <div class="bm-grid-title">${this.escapeHtml(item.title)}</div>
-          <div class="bm-grid-category">${this.escapeHtml(item.category || '')}</div>
+          ${showCategory ? `<div class="bm-grid-category">${this.escapeHtml(item.category)}</div>` : ''}
         </div>
-      `).join('');
+      `;
+      }).join('');
     } else if (viewMode === 'card') {
-      container.innerHTML = items.map(item => `
+      container.innerHTML = items.map(item => {
+        const showCategory = (isAllCategory || currentCat === '★ 收藏') && item.category && item.category !== '未分类';
+        return `
         <div class="bm-card-item" data-id="${item.id}">
+          ${item.isFavorite ? '<div class="bm-star-badge" title="已收藏">★</div>' : ''}
           <div class="bm-card-top" data-action="open">
             ${this.renderIconHTML(item, 'bm-card-icon')}
             <div class="bm-card-main">
@@ -284,27 +464,27 @@ export class UIRenderer {
             </div>
           </div>
           <div class="bm-card-footer">
-            <span class="bm-card-tag">${this.escapeHtml(item.category || '未分类')}</span>
-            <div class="bm-card-meta">
-              <span>${item.visitCount || 0} 次访问</span>
-              <div class="bm-card-actions">
-                <button class="bm-icon-action ${item.isFavorite ? 'starred' : ''}" data-action="favorite" title="收藏">
-                  ★
-                </button>
-                <button class="bm-icon-action" data-action="edit" title="编辑">
-                  ✎
-                </button>
-                <button class="bm-icon-action" data-action="delete" title="删除">
-                  ✕
-                </button>
-              </div>
+            ${showCategory ? `<span class="bm-card-tag">${this.escapeHtml(item.category)}</span>` : '<span class="bm-card-footer-spacer"></span>'}
+            <div class="bm-card-actions">
+              <button class="bm-icon-action ${item.isFavorite ? 'starred' : ''}" data-action="favorite" title="${item.isFavorite ? '取消收藏' : '收藏'}">
+                ★
+              </button>
+              <button class="bm-icon-action" data-action="edit" title="编辑">
+                ✎
+              </button>
+              <button class="bm-icon-action" data-action="delete" title="删除">
+                ✕
+              </button>
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     } else {
       // List view
-      container.innerHTML = items.map(item => `
+      container.innerHTML = items.map(item => {
+        const showCategory = (isAllCategory || currentCat === '★ 收藏') && item.category && item.category !== '未分类';
+        return `
         <div class="bm-list-item" data-id="${item.id}">
           <div class="bm-list-left" data-action="open">
             ${this.renderIconHTML(item, 'bm-list-icon')}
@@ -312,20 +492,23 @@ export class UIRenderer {
             <div class="bm-list-url">${this.escapeHtml(item.url)}</div>
           </div>
           <div class="bm-list-right">
-            <span class="bm-card-tag">${this.escapeHtml(item.category || '未分类')}</span>
-            <span style="font-size: 11px; color: var(--text-tertiary);">${item.visitCount || 0} 次</span>
-            <button class="bm-icon-action ${item.isFavorite ? 'starred' : ''}" data-action="favorite" title="收藏">
-              ★
-            </button>
-            <button class="bm-icon-action" data-action="edit" title="编辑">
-              ✎
-            </button>
-            <button class="bm-icon-action" data-action="delete" title="删除">
-              ✕
-            </button>
+            ${showCategory ? `<span class="bm-card-tag">${this.escapeHtml(item.category)}</span>` : ''}
+            ${item.isFavorite ? '<span class="bm-list-star" title="已收藏">★</span>' : ''}
+            <div class="bm-list-actions">
+              <button class="bm-icon-action ${item.isFavorite ? 'starred' : ''}" data-action="favorite" title="${item.isFavorite ? '取消收藏' : '收藏'}">
+                ★
+              </button>
+              <button class="bm-icon-action" data-action="edit" title="编辑">
+                ✎
+              </button>
+              <button class="bm-icon-action" data-action="delete" title="删除">
+                ✕
+              </button>
+            </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     // Attach event listeners

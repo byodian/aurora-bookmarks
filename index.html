@@ -27,14 +27,13 @@
   </div>
 
   <!-- Dynamic Island (iOS 27 Floating Header Capsule) -->
-  <header class="dynamic-island-wrapper">
+  <header class="dynamic-island-wrapper" id="dynamic-island-wrapper">
     <div class="dynamic-island" id="dynamic-island">
-      <div class="island-brand" id="island-brand" title="Aurora Bookmarks iOS 27">
+      <div class="island-brand" id="island-brand" title="回到顶部 (Aurora Bookmarks)">
         <span class="brand-dot"></span>
         <span>Aurora</span>
       </div>
 
-      <div class="island-time" id="island-time">--:--</div>
       <div class="island-divider"></div>
 
       <!-- Quick Search Trigger -->
@@ -56,6 +55,12 @@
 
       <!-- Actions -->
       <div class="island-actions">
+        <button class="island-icon-btn" id="island-scroll-top-btn" title="回到顶部 (置顶)" aria-label="回到顶部">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+        </button>
         <button class="island-icon-btn" id="island-add-btn" title="添加新书签">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -83,30 +88,30 @@
           </svg>
         </button>
       </div>
-    </div>
 
-    <!-- Theme Selector Dropdown -->
-    <div class="theme-menu" id="theme-menu">
-      <button class="theme-option active" data-theme="nebula">
-        <span class="theme-preview" style="background: linear-gradient(135deg, #6C5CE7, #FD79A8);"></span>
-        <span>暗夜星云 (Nebula)</span>
-      </button>
-      <button class="theme-option" data-theme="pacific">
-        <span class="theme-preview" style="background: linear-gradient(135deg, #00CEC9, #0984E3);"></span>
-        <span>深海极光 (Pacific)</span>
-      </button>
-      <button class="theme-option" data-theme="solar">
-        <span class="theme-preview" style="background: linear-gradient(135deg, #FF6B6B, #FECA57);"></span>
-        <span>日落暖阳 (Solar)</span>
-      </button>
-      <button class="theme-option" data-theme="emerald">
-        <span class="theme-preview" style="background: linear-gradient(135deg, #2ED573, #1E90FF);"></span>
-        <span>翡翠薄雾 (Emerald)</span>
-      </button>
-      <button class="theme-option" data-theme="titanium">
-        <span class="theme-preview" style="background: linear-gradient(135deg, #E8EEF5, #93C5FD);"></span>
-        <span>液态钛金 (Titanium)</span>
-      </button>
+      <!-- Theme Selector Dropdown -->
+      <div class="theme-menu" id="theme-menu">
+        <button class="theme-option active" data-theme="nebula">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #6C5CE7, #FD79A8);"></span>
+          <span>暗夜星云 (Nebula)</span>
+        </button>
+        <button class="theme-option" data-theme="pacific">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #00CEC9, #0984E3);"></span>
+          <span>深海极光 (Pacific)</span>
+        </button>
+        <button class="theme-option" data-theme="solar">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #FF6B6B, #FECA57);"></span>
+          <span>日落暖阳 (Solar)</span>
+        </button>
+        <button class="theme-option" data-theme="emerald">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #2ED573, #1E90FF);"></span>
+          <span>翡翠薄雾 (Emerald)</span>
+        </button>
+        <button class="theme-option" data-theme="titanium">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #E8EEF5, #93C5FD);"></span>
+          <span>液态钛金 (Titanium)</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -123,7 +128,7 @@
 
       <div class="widgets-grid">
         <!-- Widget 1: Frequently Visited (常访问) -->
-        <div class="widget-card">
+        <div class="widget-card" id="widget-card-frequent">
           <div class="widget-header">
             <div class="widget-name-box">
               <div class="widget-icon-pill widget-icon-fire">🔥</div>
@@ -132,14 +137,24 @@
                 <div class="widget-sublabel">依据点击频次智能排序</div>
               </div>
             </div>
+            <div class="widget-nav-controls">
+              <button class="widget-nav-btn prev" data-target="frequent-widget-list" title="向前切换" aria-label="向前切换">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="widget-nav-btn next" data-target="frequent-widget-list" title="向后切换" aria-label="向后切换">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
           </div>
-          <div class="widget-items-list" id="frequent-widget-list">
-            <!-- Rendered by JS -->
+          <div class="widget-track-container">
+            <div class="widget-items-list" id="frequent-widget-list">
+              <!-- Rendered by JS -->
+            </div>
           </div>
         </div>
 
         <!-- Widget 2: Recently Visited (最近访问) -->
-        <div class="widget-card">
+        <div class="widget-card" id="widget-card-recent">
           <div class="widget-header">
             <div class="widget-name-box">
               <div class="widget-icon-pill widget-icon-clock">🕒</div>
@@ -148,14 +163,24 @@
                 <div class="widget-sublabel">记录最近打开的时间足迹</div>
               </div>
             </div>
+            <div class="widget-nav-controls">
+              <button class="widget-nav-btn prev" data-target="recent-widget-list" title="向前切换" aria-label="向前切换">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="widget-nav-btn next" data-target="recent-widget-list" title="向后切换" aria-label="向后切换">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
           </div>
-          <div class="widget-items-list" id="recent-widget-list">
-            <!-- Rendered by JS -->
+          <div class="widget-track-container">
+            <div class="widget-items-list" id="recent-widget-list">
+              <!-- Rendered by JS -->
+            </div>
           </div>
         </div>
 
         <!-- Widget 3: Stats Overview (概览微件) -->
-        <div class="widget-card">
+        <div class="widget-card" id="widget-card-stats">
           <div class="widget-header">
             <div class="widget-name-box">
               <div class="widget-icon-pill widget-icon-stats">📊</div>
@@ -256,6 +281,7 @@
   <!-- iOS 27 Floating Dock -->
   <nav class="dock-wrapper">
     <div class="dock">
+      <div class="dock-glider" id="dock-glider"></div>
       <button class="dock-item active" data-dock="all" title="全部书签">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -373,10 +399,10 @@
       </div>
 
       <!-- Quick Preset Load Button -->
-      <div style="background: rgba(10, 132, 255, 0.12); border: 1px solid rgba(10, 132, 255, 0.3); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <div class="preset-banner" id="preset-banner">
         <div>
-          <div style="font-size: 14px; font-weight: 700; color: #FFFFFF;">载入精选预设书签</div>
-          <div style="font-size: 11px; color: var(--text-tertiary);">一键导入当前备份的 1,084 条精选网址</div>
+          <div class="preset-banner-title">载入精选预设书签</div>
+          <div class="preset-banner-sub">一键导入当前备份的 1,084 条精选网址</div>
         </div>
         <button type="button" class="action-pill-btn primary" id="load-preset-btn">
           <span>⚡ 一键载入</span>
@@ -386,24 +412,24 @@
       <!-- Drag & Drop Zone -->
       <div class="dropzone" id="import-dropzone">
         <div class="dropzone-icon">📥</div>
-        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">点击或拖拽浏览器书签 HTML 文件到此处</div>
-        <div style="font-size: 11px; color: var(--text-tertiary);">支持 Chrome / Edge / Safari / Firefox 导出的 HTML 书签或 JSON 备份</div>
+        <div class="dropzone-title">点击或拖拽浏览器书签 HTML 文件到此处</div>
+        <div class="dropzone-sub">支持 Chrome / Edge / Safari / Firefox 导出的 HTML 书签或 JSON 备份</div>
         <input type="file" id="import-file-input" accept=".html,.json" style="display: none;">
       </div>
 
       <!-- Export Operations -->
-      <div style="display: flex; gap: 10px;">
-        <button type="button" class="action-pill-btn" id="export-html-btn" style="flex: 1; justify-content: center;">
+      <div class="export-actions-row">
+        <button type="button" class="action-pill-btn export-btn" id="export-html-btn">
           <span>📤 导出标准 HTML</span>
         </button>
-        <button type="button" class="action-pill-btn" id="export-json-btn" style="flex: 1; justify-content: center;">
+        <button type="button" class="action-pill-btn export-btn" id="export-json-btn">
           <span>💾 导出 JSON 备份</span>
         </button>
       </div>
 
       <!-- Clear Data -->
-      <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
-        <button type="button" class="action-pill-btn" id="clear-all-btn" style="color: var(--ios-red); border-color: rgba(255, 69, 58, 0.3);">
+      <div class="clear-actions-row">
+        <button type="button" class="action-pill-btn clear-btn" id="clear-all-btn">
           <span>🗑 清空本地数据</span>
         </button>
       </div>

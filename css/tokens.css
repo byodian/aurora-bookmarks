@@ -13,23 +13,63 @@
   --glass-blur-medium: blur(24px) saturate(190%) brightness(1.05);
   --glass-blur-subtle: blur(16px) saturate(180%);
 
-  /* Default Theme: Nebula Deep Space (iOS 27 Dark Aurora) */
-  --bg-space: #060810;
-  --bg-gradient: radial-gradient(circle at 15% 15%, rgba(108, 92, 231, 0.28) 0%, transparent 45%),
-                 radial-gradient(circle at 85% 25%, rgba(253, 121, 168, 0.22) 0%, transparent 40%),
-                 radial-gradient(circle at 50% 85%, rgba(9, 132, 227, 0.25) 0%, transparent 55%),
-                 radial-gradient(circle at 75% 75%, rgba(0, 206, 201, 0.18) 0%, transparent 45%),
-                 linear-gradient(180deg, #060810 0%, #0c0f1d 100%);
+  /* Default Theme: Nebula Deep Space (iOS 27 Dark Aurora Ambient Lighting) */
+  --bg-space: #070913;
+  --bg-gradient: radial-gradient(ellipse 75% 65% at 12% 38%, rgba(56, 94, 168, 0.18) 0%, rgba(56, 94, 168, 0.08) 45%, transparent 72%),
+                 radial-gradient(ellipse 70% 60% at 86% 20%, rgba(116, 84, 172, 0.15) 0%, rgba(116, 84, 172, 0.06) 42%, transparent 70%),
+                 radial-gradient(ellipse 80% 60% at 50% 86%, rgba(30, 140, 132, 0.13) 0%, rgba(30, 140, 132, 0.05) 45%, transparent 75%),
+                 linear-gradient(180deg, #070913 0%, #0b0e1b 48%, #060810 100%);
 
   --glass-bg-primary: rgba(22, 27, 46, 0.65);
   --glass-bg-secondary: rgba(28, 35, 60, 0.5);
   --glass-bg-tertiary: rgba(35, 44, 75, 0.38);
   --glass-bg-hover: rgba(45, 56, 95, 0.7);
   --glass-bg-active: rgba(55, 68, 115, 0.85);
+  --glass-bg-menu: rgba(18, 22, 38, 0.94);
 
   --glass-border-light: rgba(255, 255, 255, 0.18);
   --glass-border-subtle: rgba(255, 255, 255, 0.08);
   --glass-border-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.2) 100%);
+
+  /* ============================================================
+     Unified Glass & Surface Design Tokens (iOS 27 Spatial Hierarchy)
+     ============================================================ */
+
+  /* 1. Glass Strong: 顶部 Toolbar, 底部 Floating Tab Bar (高通透液体感、更高饱和渗透、精致高光、柔和自然投影、无黑边霓虹) */
+  --glass-bg-strong: rgba(16, 20, 36, 0.45);
+  --glass-blur-strong: blur(28px) saturate(220%) brightness(1.08);
+  --glass-border-strong: 1px solid rgba(255, 255, 255, 0.22);
+  --glass-highlight-strong: inset 0 1px 0.5px rgba(255, 255, 255, 0.35);
+  --glass-shadow-strong: 0 14px 34px -2px rgba(0, 0, 0, 0.38), inset 0 1px 0.5px rgba(255, 255, 255, 0.3), inset 0 -0.5px 0.5px rgba(255, 255, 255, 0.08);
+
+  /* 2. Glass: 顶部统计区域 (比 Toolbar 更实、中等 blur、保留背景透射、极弱阴影、微弱顶部反光条) */
+  --glass-bg: rgba(18, 24, 44, 0.65);
+  --glass-blur: blur(18px) saturate(180%) brightness(1.03);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-highlight: linear-gradient(90deg, transparent 5%, rgba(255, 255, 255, 0.24) 50%, transparent 95%);
+  --glass-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* 3. Glass Subtle: 分类 Chip, 辅助控件 (未选中: 极轻透明底、无模糊、无明显阴影、极弱边框) */
+  --glass-bg-subtle: rgba(255, 255, 255, 0.045);
+  --glass-bg-subtle-hover: rgba(255, 255, 255, 0.08);
+  --glass-blur-subtle: none;
+  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+  --glass-shadow-subtle: none;
+
+  /* 4. Surface: Bookmark Card (Content Surface: 实底高可读性、弱 blur、减少 shadow、极弱边框、保留背景微弱透射) */
+  --surface-bg: rgba(14, 18, 34, 0.88);
+  --surface-bg-hover: rgba(20, 26, 48, 0.92);
+  --surface-border: 1px solid rgba(255, 255, 255, 0.06);
+  --surface-border-hover: 1px solid rgba(255, 255, 255, 0.13);
+  --surface-blur: blur(6px);
+  --surface-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  --surface-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.25);
+
+  /* Glider & Active Category Capsule: 选中状态 (明确胶囊、高对比度、轻微 Glass 质感) */
+  --glider-bg: rgba(255, 255, 255, 0.16);
+  --glider-border: 1px solid rgba(255, 255, 255, 0.24);
+  --glider-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --glider-blur: blur(12px) saturate(180%);
 
   --text-primary: #FFFFFF;
   --text-secondary: rgba(255, 255, 255, 0.75);
@@ -63,6 +103,7 @@
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   --shadow-island: 0 12px 36px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(255, 255, 255, 0.2) inset, 0 0 20px rgba(10, 132, 255, 0.15);
   --shadow-dock: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+  --shadow-menu: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--glass-border-light);
 
   /* Spring Physics Timings */
   --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -70,69 +111,200 @@
   --spring-quick: cubic-bezier(0.25, 0.8, 0.25, 1);
   --transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Notion-style Minimal Scrollbars */
+  --notion-scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --notion-scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+  --notion-scrollbar-thumb-active: rgba(255, 255, 255, 0.55);
 }
 
 /* Theme: Pacific Ocean (深海极光蓝) */
-[data-theme="pacific"] {
+:root[data-theme="pacific"],
+html[data-theme="pacific"] {
   --bg-space: #030d1a;
-  --bg-gradient: radial-gradient(circle at 10% 20%, rgba(0, 206, 201, 0.3) 0%, transparent 45%),
-                 radial-gradient(circle at 90% 30%, rgba(9, 132, 227, 0.35) 0%, transparent 45%),
-                 radial-gradient(circle at 50% 90%, rgba(108, 92, 231, 0.25) 0%, transparent 55%),
-                 linear-gradient(180deg, #030d1a 0%, #06192d 100%);
+  --bg-gradient: radial-gradient(ellipse 75% 65% at 12% 38%, rgba(20, 110, 180, 0.18) 0%, rgba(20, 110, 180, 0.08) 45%, transparent 72%),
+                 radial-gradient(ellipse 70% 60% at 86% 20%, rgba(70, 95, 175, 0.15) 0%, rgba(70, 95, 175, 0.06) 42%, transparent 70%),
+                 radial-gradient(ellipse 80% 60% at 50% 86%, rgba(18, 145, 155, 0.14) 0%, rgba(18, 145, 155, 0.05) 45%, transparent 75%),
+                 linear-gradient(180deg, #030d1a 0%, #061528 48%, #030d1a 100%);
   --glass-bg-primary: rgba(10, 28, 50, 0.68);
   --glass-bg-secondary: rgba(14, 38, 68, 0.52);
+  --glass-bg-tertiary: rgba(18, 48, 85, 0.42);
   --glass-bg-hover: rgba(20, 52, 92, 0.72);
+  --glass-bg-active: rgba(26, 68, 120, 0.85);
+  --glass-bg-menu: rgba(8, 24, 42, 0.95);
+  --ios-blue: #00CEC9;
+
+  --glass-bg-strong: rgba(8, 20, 38, 0.45);
+  --glass-border-strong: 1px solid rgba(0, 206, 201, 0.25);
+  --glass-shadow-strong: 0 14px 34px -2px rgba(0, 0, 0, 0.42), inset 0 1px 0.5px rgba(255, 255, 255, 0.3), inset 0 -0.5px 0.5px rgba(0, 206, 201, 0.15);
+
+  --glass-bg: rgba(9, 24, 46, 0.65);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-highlight: linear-gradient(90deg, transparent 5%, rgba(0, 206, 201, 0.25) 50%, transparent 95%);
+
+  --glass-bg-subtle: rgba(255, 255, 255, 0.045);
+  --glass-bg-subtle-hover: rgba(255, 255, 255, 0.08);
+  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  --surface-bg: rgba(7, 19, 36, 0.88);
+  --surface-bg-hover: rgba(11, 28, 52, 0.92);
+  --surface-border: 1px solid rgba(255, 255, 255, 0.06);
+  --surface-border-hover: 1px solid rgba(0, 206, 201, 0.16);
+  --surface-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --surface-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.28);
+
+  --glider-bg: rgba(0, 206, 201, 0.18);
+  --glider-border: 1px solid rgba(0, 206, 201, 0.32);
+  --glider-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 /* Theme: Solar Flare (日落暖阳微光) */
-[data-theme="solar"] {
+:root[data-theme="solar"],
+html[data-theme="solar"] {
   --bg-space: #140807;
-  --bg-gradient: radial-gradient(circle at 20% 20%, rgba(255, 107, 107, 0.28) 0%, transparent 45%),
-                 radial-gradient(circle at 80% 25%, rgba(254, 202, 87, 0.25) 0%, transparent 40%),
-                 radial-gradient(circle at 50% 80%, rgba(255, 159, 26, 0.2) 0%, transparent 50%),
-                 linear-gradient(180deg, #140807 0%, #200f13 100%);
+  --bg-gradient: radial-gradient(ellipse 75% 65% at 12% 38%, rgba(165, 70, 60, 0.16) 0%, rgba(165, 70, 60, 0.07) 45%, transparent 72%),
+                 radial-gradient(ellipse 70% 60% at 86% 20%, rgba(160, 105, 55, 0.14) 0%, rgba(160, 105, 55, 0.06) 42%, transparent 70%),
+                 radial-gradient(ellipse 80% 60% at 50% 86%, rgba(145, 65, 45, 0.12) 0%, rgba(145, 65, 45, 0.05) 45%, transparent 75%),
+                 linear-gradient(180deg, #140807 0%, #1c0e12 48%, #140807 100%);
   --glass-bg-primary: rgba(45, 20, 22, 0.68);
   --glass-bg-secondary: rgba(58, 26, 28, 0.52);
+  --glass-bg-tertiary: rgba(68, 30, 34, 0.42);
   --glass-bg-hover: rgba(80, 36, 40, 0.72);
+  --glass-bg-active: rgba(105, 46, 52, 0.85);
+  --glass-bg-menu: rgba(30, 14, 16, 0.95);
+  --ios-blue: #FF7675;
+
+  --glass-bg-strong: rgba(32, 14, 16, 0.45);
+  --glass-border-strong: 1px solid rgba(255, 107, 107, 0.25);
+  --glass-shadow-strong: 0 14px 34px -2px rgba(0, 0, 0, 0.42), inset 0 1px 0.5px rgba(255, 255, 255, 0.3), inset 0 -0.5px 0.5px rgba(255, 107, 107, 0.15);
+
+  --glass-bg: rgba(38, 18, 20, 0.65);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-highlight: linear-gradient(90deg, transparent 5%, rgba(255, 107, 107, 0.25) 50%, transparent 95%);
+
+  --glass-bg-subtle: rgba(255, 255, 255, 0.045);
+  --glass-bg-subtle-hover: rgba(255, 255, 255, 0.08);
+  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  --surface-bg: rgba(24, 10, 12, 0.88);
+  --surface-bg-hover: rgba(34, 15, 18, 0.92);
+  --surface-border: 1px solid rgba(255, 255, 255, 0.06);
+  --surface-border-hover: 1px solid rgba(255, 107, 107, 0.16);
+  --surface-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --surface-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.28);
+
+  --glider-bg: rgba(255, 107, 107, 0.18);
+  --glider-border: 1px solid rgba(255, 107, 107, 0.32);
+  --glider-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 /* Theme: Emerald Forest (翡翠薄雾) */
-[data-theme="emerald"] {
+:root[data-theme="emerald"],
+html[data-theme="emerald"] {
   --bg-space: #05130f;
-  --bg-gradient: radial-gradient(circle at 25% 15%, rgba(46, 213, 115, 0.28) 0%, transparent 45%),
-                 radial-gradient(circle at 80% 30%, rgba(0, 184, 148, 0.25) 0%, transparent 45%),
-                 radial-gradient(circle at 45% 85%, rgba(30, 144, 255, 0.2) 0%, transparent 50%),
-                 linear-gradient(180deg, #05130f 0%, #08211a 100%);
+  --bg-gradient: radial-gradient(ellipse 75% 65% at 12% 38%, rgba(26, 120, 90, 0.16) 0%, rgba(26, 120, 90, 0.07) 45%, transparent 72%),
+                 radial-gradient(ellipse 70% 60% at 86% 20%, rgba(32, 100, 135, 0.14) 0%, rgba(32, 100, 135, 0.06) 42%, transparent 70%),
+                 radial-gradient(ellipse 80% 60% at 50% 86%, rgba(22, 135, 95, 0.13) 0%, rgba(22, 135, 95, 0.05) 45%, transparent 75%),
+                 linear-gradient(180deg, #05130f 0%, #081d17 48%, #05130f 100%);
   --glass-bg-primary: rgba(10, 38, 30, 0.68);
   --glass-bg-secondary: rgba(14, 50, 40, 0.52);
+  --glass-bg-tertiary: rgba(18, 62, 50, 0.42);
   --glass-bg-hover: rgba(22, 68, 54, 0.72);
+  --glass-bg-active: rgba(28, 88, 70, 0.85);
+  --glass-bg-menu: rgba(8, 28, 22, 0.95);
+  --ios-blue: #2ED573;
+
+  --glass-bg-strong: rgba(8, 24, 20, 0.45);
+  --glass-border-strong: 1px solid rgba(46, 213, 115, 0.25);
+  --glass-shadow-strong: 0 14px 34px -2px rgba(0, 0, 0, 0.42), inset 0 1px 0.5px rgba(255, 255, 255, 0.3), inset 0 -0.5px 0.5px rgba(46, 213, 115, 0.15);
+
+  --glass-bg: rgba(10, 32, 26, 0.65);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-highlight: linear-gradient(90deg, transparent 5%, rgba(46, 213, 115, 0.25) 50%, transparent 95%);
+
+  --glass-bg-subtle: rgba(255, 255, 255, 0.045);
+  --glass-bg-subtle-hover: rgba(255, 255, 255, 0.08);
+  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  --surface-bg: rgba(6, 22, 18, 0.88);
+  --surface-bg-hover: rgba(10, 30, 25, 0.92);
+  --surface-border: 1px solid rgba(255, 255, 255, 0.06);
+  --surface-border-hover: 1px solid rgba(46, 213, 115, 0.16);
+  --surface-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --surface-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.28);
+
+  --glider-bg: rgba(46, 213, 115, 0.18);
+  --glider-border: 1px solid rgba(46, 213, 115, 0.32);
+  --glider-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 /* Theme: Liquid Titanium (浅色极简钛金 - Light Mode) */
-[data-theme="titanium"] {
+:root[data-theme="titanium"],
+html[data-theme="titanium"] {
   --bg-space: #E8EEF5;
-  --bg-gradient: radial-gradient(circle at 20% 20%, rgba(147, 197, 253, 0.5) 0%, transparent 45%),
-                 radial-gradient(circle at 80% 25%, rgba(216, 180, 254, 0.45) 0%, transparent 40%),
-                 radial-gradient(circle at 50% 85%, rgba(167, 243, 208, 0.4) 0%, transparent 55%),
-                 linear-gradient(180deg, #E8EEF5 0%, #DBE4EF 100%);
+  --bg-gradient: radial-gradient(ellipse 75% 65% at 12% 38%, rgba(150, 190, 240, 0.28) 0%, rgba(150, 190, 240, 0.1) 45%, transparent 72%),
+                 radial-gradient(ellipse 70% 60% at 86% 20%, rgba(195, 180, 235, 0.24) 0%, rgba(195, 180, 235, 0.08) 42%, transparent 70%),
+                 radial-gradient(ellipse 80% 60% at 50% 86%, rgba(165, 220, 205, 0.22) 0%, rgba(165, 220, 205, 0.07) 45%, transparent 75%),
+                 linear-gradient(180deg, #E8EEF5 0%, #DFE7F0 100%);
 
-  --glass-bg-primary: rgba(255, 255, 255, 0.72);
-  --glass-bg-secondary: rgba(255, 255, 255, 0.55);
-  --glass-bg-tertiary: rgba(255, 255, 255, 0.42);
-  --glass-bg-hover: rgba(255, 255, 255, 0.88);
-  --glass-bg-active: rgba(255, 255, 255, 0.95);
+  --glass-bg-primary: rgba(255, 255, 255, 0.75);
+  --glass-bg-secondary: rgba(255, 255, 255, 0.58);
+  --glass-bg-tertiary: rgba(255, 255, 255, 0.45);
+  --glass-bg-hover: rgba(255, 255, 255, 0.9);
+  --glass-bg-active: rgba(255, 255, 255, 0.98);
+  --glass-bg-menu: rgba(255, 255, 255, 0.96);
 
   --glass-border-light: rgba(255, 255, 255, 0.85);
   --glass-border-subtle: rgba(0, 0, 0, 0.08);
+  --glass-border-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(0, 0, 0, 0.03) 50%, rgba(255, 255, 255, 0.6) 100%);
+
+  --glass-bg-strong: rgba(255, 255, 255, 0.68);
+  --glass-border-strong: 1px solid rgba(255, 255, 255, 0.95);
+  --glass-highlight-strong: inset 0 1px 0 #FFFFFF;
+  --glass-shadow-strong: 0 14px 32px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03), inset 0 1px 0 #FFFFFF;
+
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.07);
+  --glass-shadow: 0 6px 18px rgba(0, 0, 0, 0.04), inset 0 1px 0 #FFFFFF;
+  --glass-highlight: linear-gradient(90deg, transparent 5%, rgba(255, 255, 255, 0.85) 50%, transparent 95%);
+
+  --glass-bg-subtle: rgba(0, 0, 0, 0.035);
+  --glass-bg-subtle-hover: rgba(0, 0, 0, 0.06);
+  --glass-border-subtle: 1px solid rgba(0, 0, 0, 0.05);
+  --glass-shadow-subtle: none;
+
+  --surface-bg: rgba(255, 255, 255, 0.92);
+  --surface-bg-hover: #FFFFFF;
+  --surface-border: 1px solid rgba(0, 0, 0, 0.06);
+  --surface-border-hover: 1px solid rgba(0, 0, 0, 0.12);
+  --surface-blur: blur(6px);
+  --surface-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  --surface-shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.06);
+
+  --glider-bg: rgba(255, 255, 255, 0.86);
+  --glider-border: 1px solid rgba(255, 255, 255, 0.95);
+  --glider-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 1px 0.5px #FFFFFF;
 
   --text-primary: #111827;
   --text-secondary: rgba(17, 24, 39, 0.78);
   --text-tertiary: rgba(17, 24, 39, 0.52);
   --text-quaternary: rgba(17, 24, 39, 0.35);
 
+  --ios-blue: #0A84FF;
+  --ios-cyan: #0077A3;
+
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
   --shadow-island: 0 12px 32px rgba(0, 0, 0, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
   --shadow-dock: 0 20px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+  --shadow-menu: 0 16px 36px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+  /* Notion Light Mode Scrollbar */
+  --notion-scrollbar-thumb: rgba(55, 53, 47, 0.2);
+  --notion-scrollbar-thumb-hover: rgba(55, 53, 47, 0.38);
+  --notion-scrollbar-thumb-active: rgba(55, 53, 47, 0.52);
 }

@@ -1721,11 +1721,11 @@ body {
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   width: auto;
-  height: 60px;
+  height: 46px;
   box-sizing: border-box;
-  padding: 6px 8px;
+  padding: 5px 6px;
   border-radius: 9999px;
   background: var(--glass-bg-strong);
   backdrop-filter: var(--glass-blur-strong);
@@ -1744,7 +1744,7 @@ body {
   left: 0;
   pointer-events: none;
   z-index: 1;
-  border-radius: 16px;
+  border-radius: 9999px;
   background: var(--glider-bg);
   backdrop-filter: var(--glider-blur, blur(16px) saturate(180%));
   -webkit-backdrop-filter: var(--glider-blur, blur(16px) saturate(180%));
@@ -1766,14 +1766,15 @@ body {
 .dock-item {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 48px;
-  min-width: 64px;
-  padding: 0 12px;
-  border-radius: 16px;
+  gap: 6px;
+  height: 36px;
+  min-width: 78px;
+  padding: 0 14px;
+  border-radius: 9999px;
   background: transparent;
   border: none;
   color: var(--text-tertiary);
@@ -1792,17 +1793,18 @@ body {
 }
 
 .dock-item svg {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
   transition: transform 0.22s ease;
 }
 
 .dock-item-label {
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 500;
-  line-height: 1.1;
-  margin-top: 3px;
+  line-height: 1;
   letter-spacing: -0.1px;
+  white-space: nowrap;
   transition: color 0.22s ease, font-weight 0.22s ease;
 }
 
@@ -1817,7 +1819,7 @@ body {
 }
 
 .dock-item.active svg {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 /* Fallback Capsule (before glider or without glider) */
@@ -1865,26 +1867,28 @@ body {
 
 @media (max-width: 480px) {
   .dock {
-    height: 56px;
-    padding: 4px 6px;
-    gap: 2px;
+    height: 44px;
+    padding: 4px 5px;
+    gap: 3px;
+    max-width: calc(100vw - 20px);
   }
   .dock-item {
-    height: 48px;
-    min-width: 50px;
-    padding: 0 8px;
-    border-radius: 14px;
+    height: 36px;
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 0 6px;
+    gap: 4px;
+    border-radius: 9999px;
   }
   .dock-glider {
-    border-radius: 14px;
+    border-radius: 9999px;
   }
   .dock-item svg {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
   }
   .dock-item-label {
-    font-size: 10px;
-    margin-top: 2px;
+    font-size: 10.5px;
   }
 }
 
